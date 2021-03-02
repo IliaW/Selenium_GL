@@ -1,0 +1,26 @@
+CSS: .manufacturers.dropdown
+XPATH: //li[@class = 'manufacturers dropdown']
+
+CSS: .account.dropdown
+XPATH: //li[@class = 'account dropdown']
+
+CSS: .listing.products .product:nth-child(2)
+XPATH: //*[text() = 'Recently Viewed']/..//*[@class = 'product'][2]
+
+CSS: #box-popular-products .product-column:nth-child(2) img
+XPATH: //*[text() = 'Popular Products']/..//*[@class = 'product-column'][2]
+
+CSS: #box-latest-products .product-column .campaign-price
+XPATH: //*[text() = 'Latest Products']/..//*[@class = 'campaign-price']
+
+CSS: #box-latest-products .product-column:nth-child(3)
+XPATH: //*[text() = 'Latest Products']/..//*[@class = 'product-column'][3]
+
+CSS: [name = email]
+XPATH: //input[@name = 'email']
+
+CSS: [name = password]
+XPATH: //input[@name = 'password']
+
+CSS: .account .dropdown-menu  li:nth-child(2)
+XPATH: //a[text() = 'New customers click here']/..
