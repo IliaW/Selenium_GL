@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
-public class AuthorizationTest extends BaseTest {
+public class SequentiallyClick extends BaseTest {
     private final By MENU_ITEMS = By.cssSelector("#box-apps-menu li.app");
     private final By SUB_MENU_ITEMS = By.cssSelector(".app.selected ul li");
     private final By HEADER = By.cssSelector("div.panel-heading");
