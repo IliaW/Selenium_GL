@@ -4,7 +4,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -27,10 +26,6 @@ public class BaseTest {
         wd.get(url);
     }
 
-    public WebDriver getDriver() {
-        return wd;
-    }
-
     public WebElement find(By locator) {
         return wd.findElement(locator);
     }
@@ -49,9 +44,5 @@ public class BaseTest {
 
     public void setImplicitlyWait(long time, TimeUnit unit) {
         wd.manage().timeouts().implicitlyWait(time, unit);
-    }
-
-    public WebDriverWait wait(int timeOutInSeconds) {
-        return new WebDriverWait(getDriver(), timeOutInSeconds);
     }
 }

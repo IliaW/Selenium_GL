@@ -1,33 +1,37 @@
 package com.litecart.homework1;
 
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Test;
 import org.openqa.selenium.By;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
+import static org.junit.Assert.assertTrue;
 
 public class SequentiallyClick extends BaseTest {
     private final By MENU_ITEMS = By.cssSelector("#box-apps-menu li.app");
     private final By SUB_MENU_ITEMS = By.cssSelector(".app.selected ul li");
     private final By HEADER = By.cssSelector("div.panel-heading");
 
+    @After
+    public void after() {
+        quitDriver();
+    }
+
     @Test
     public void sequentiallyClickTest() {
-        try {
-            loginToAdminDashboard("testadmin", "R8MRDAYT_test");
-            for (int i = 0; i < findAll(MENU_ITEMS).size(); i++) {
-                findAll(MENU_ITEMS).get(i).click();
-                wait(4).until(presenceOfElementLocated(HEADER));
-                if (isSubMenuItemsPresent()) {
-                    for (int k = 0; k < findAll(SUB_MENU_ITEMS).size(); k++) {
-                        findAll(SUB_MENU_ITEMS).get(k).click();
-                        wait(4).until(presenceOfElementLocated(HEADER));
-                    }
+        loginToAdminDashboard("testadmin", "R8MRDAYT_test");
+        int menuItemsCount = findAll(MENU_ITEMS).size();
+        for (int i = 0; i < menuItemsCount; i++) {
+            findAll(MENU_ITEMS).get(i).click();
+            assertTrue(find(HEADER).isDisplayed());
+            if (isSubMenuItemsPresent()) {
+                int subMenuItemsCount = findAll(SUB_MENU_ITEMS).size();
+                for (int k = 0; k < subMenuItemsCount; k++) {
+                    findAll(SUB_MENU_ITEMS).get(k).click();
+                    assertTrue(find(HEADER).isDisplayed());
                 }
             }
-        } finally {
-            quitDriver();
         }
     }
 
@@ -43,13 +47,5 @@ public class SequentiallyClick extends BaseTest {
         boolean isItemsPresent = findAll(".app.selected ul").size() > 0;
         setImplicitlyWait(DEFAULT_WAIT, TimeUnit.SECONDS);
         return isItemsPresent;
-    }
-
-    public void waitFor(long timeInSeconds) {
-        try {
-            Thread.sleep(timeInSeconds * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }
