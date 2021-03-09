@@ -12,6 +12,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class CartTest {
     public static void beforeClass() {
         wd = new ChromeDriver();
         wd.manage().window().setSize(new Dimension(1920, 1080));
-        wd.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
+        wd.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
     }
 
     @AfterClass
@@ -57,15 +58,16 @@ public class CartTest {
                 WebElement numberOfItemsInCart = wd.findElement(ITEMS_QUANTITY);
                 int numOfItemsBeforeAdding = numberOfItemsInCart.getText().equals("")
                         ? 0 : Integer.parseInt(numberOfItemsInCart.getText());
+                int numOfItemsAfterAdding = ++numOfItemsBeforeAdding;
                 wd.findElement(ADD_TO_CART_BUTTON).click();
-                sleep(1, "Wait until product added to cart.");
-                soft.assertThat(wd.findElement(ITEMS_QUANTITY).getText()).isEqualTo(++numOfItemsBeforeAdding + "");
+                new WebDriverWait(wd, 2).until(ExpectedConditions.textToBe(ITEMS_QUANTITY, Integer.toString(numOfItemsAfterAdding)));
+                soft.assertThat(wd.findElement(ITEMS_QUANTITY).getText()).isEqualTo(Integer.toString(numOfItemsAfterAdding));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         wd.findElement(CART_BUTTON).click();
-        soft.assertThat(wd.findElements(By.cssSelector(".item > .row")).size()).isNotEqualTo(0);
+        soft.assertThat(wd.findElements(LIST_OF_ADDED_PRODUCTS).size()).isNotEqualTo(0);
         soft.assertAll();
     }
 
@@ -76,7 +78,7 @@ public class CartTest {
         while (wd.findElements(LIST_OF_ADDED_PRODUCTS).size() > 0) {
             int numberOfRowsBeforeDeleting = wd.findElements(LIST_OF_ADDED_PRODUCTS).size();
             wd.findElement(LIST_OF_ADDED_PRODUCTS).findElement(REMOVE_BUTTON).click();
-            new WebDriverWait(wd, 4).until((ExpectedCondition<Boolean>) driver -> {
+            new WebDriverWait(wd, 2).until((ExpectedCondition<Boolean>) driver -> {
                 int numberOfRowsAfterDeleting = driver.findElements(LIST_OF_ADDED_PRODUCTS).size();
                 return numberOfRowsBeforeDeleting == ++numberOfRowsAfterDeleting;
             });
@@ -85,7 +87,7 @@ public class CartTest {
     }
 
     private void acceptCookies() {
-        WebElement element = new WebDriverWait(wd, 4).until(presenceOfElementLocated(
+        WebElement element = new WebDriverWait(wd, 2).until(presenceOfElementLocated(
                 By.xpath("//button[text() = 'I accept']")));
         if (element.isDisplayed()) element.click();
         cookiesAccepted = true;
